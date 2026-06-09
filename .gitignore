@@ -1,0 +1,11 @@
+/vendor/
+/node_modules/
+*.log
+.phpunit.result.cache
+.phpcs.cache
+
+# Local Docker test environment state
+/test/.wp-data/
+
+# Maintainer-local compose override (points the test env at a local dev stack)
+/test/docker-compose.override.yml

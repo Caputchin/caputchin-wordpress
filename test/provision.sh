@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Idempotent provisioning for the local Caputchin WordPress test environment.
+# Run on demand:  docker compose run --rm wpcli
+#
+# Safe to re-run: every step checks state first.
+
+set -euo pipefail
+cd /var/www/html
+
+echo "Waiting for WordPress core files..."
+for _ in $(seq 1 30); do
+	[ -f /var/www/html/wp-load.php ] && break
+	sleep 2
+done
+
+echo "Waiting for the database..."
+for _ in $(seq 1 30); do
+	wp db check >/dev/null 2>&1 && break
+	sleep 2
+done
+
+if ! wp core is-installed >/dev/null 2>&1; then
+	echo "Installing WordPress..."
+	wp core install \
+		--url="http://localhost:8080" \
+		--title="Caputchin Live Test" \
+		--admin_user="admin" \
+		--admin_password="admin" \
+		--admin_email="admin@example.com" \
+		--skip-email
+fi
+
+wp plugin is-active caputchin >/dev/null 2>&1 || wp plugin activate caputchin
+
+if ! wp plugin is-active contact-form-7 >/dev/null 2>&1; then
+	echo "Installing Contact Form 7..."
+	wp plugin install contact-form-7 --activate
+fi
+
+if [ -n "${CPT_PUB:-}" ] && [ -n "${CPT_SEC:-}" ]; then
+	wp option update caputchin_settings --format=json "{\"sitekey\":\"${CPT_PUB}\",\"secret\":\"${CPT_SEC}\",\"appearance\":{\"skin\":\"auto\",\"size\":\"normal\",\"locale\":\"\",\"invisible\":false},\"integrations\":{\"wp_comment\":true,\"wp_login\":true,\"wp_register\":true,\"wp_lost_password\":true,\"cf7\":true,\"wpforms\":true,\"elementor_pro\":true,\"gravity_forms\":true,\"fluent_forms\":true}}"
+	echo "Saved caputchin_settings with the provided keys."
+else
+	echo "WARNING: CPT_PUB / CPT_SEC are not set. The widget cannot verify without a site key."
+	echo "         Mint a dev site key (see README.md), export CPT_PUB and CPT_SEC, then re-run."
+fi
+
+# Comment-form test post (idempotent by slug). The comment form exercises the
+# WPComment adapter end to end without any third-party form plugin.
+if ! wp post list --post_type=post --post_status=publish --name="caputchin-live-test" --field=ID | grep -q .; then
+	echo "Creating the test post..."
+	wp post create \
+		--post_type=post \
+		--post_status=publish \
+		--post_title="Caputchin Live Test" \
+		--post_name="caputchin-live-test" \
+		--post_content="Leave a comment below to exercise the Caputchin widget on the WordPress comment form." \
+		--comment_status=open
+fi
+
+# Let logged-out comments post without manual approval so the live test gets a
+# clear accepted-vs-blocked signal.
+wp option update comment_moderation 0
+wp option update comment_previously_approved 0
+wp option update require_name_email 1
+
+echo
+echo "Provisioning complete."
+echo "Test post:     http://localhost:8080/caputchin-live-test/"
+echo "Admin:         http://localhost:8080/wp-admin/ (admin / admin)"
+echo "Plugin set up: Settings, Caputchin"

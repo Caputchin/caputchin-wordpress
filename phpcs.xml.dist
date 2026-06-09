@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<ruleset name="caputchin">
+	<description>Coding standards for the Caputchin WordPress plugin.</description>
+
+	<file>.</file>
+	<exclude-pattern>/vendor/</exclude-pattern>
+	<exclude-pattern>/node_modules/</exclude-pattern>
+	<exclude-pattern>/test/</exclude-pattern>
+	<exclude-pattern>*/blocks/*/index.js</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="ps"/>
+
+	<config name="testVersion" value="7.4-"/>
+	<config name="minimum_wp_version" value="6.0"/>
+
+	<rule ref="WordPress">
+		<!-- Source is PSR-4 autoloaded (ClassName.php), not the WordPress
+		     class-file naming scheme. -->
+		<exclude name="WordPress.Files.FileName"/>
+		<!-- WordPress-Docs commenting is optional. Classes and non-trivial
+		     methods are documented; we do not require a docblock on every
+		     accessor or a short description on every @package file header.
+		     All security and correctness sniffs stay enabled. -->
+		<exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="caputchin"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="caputchin"/>
+				<element value="Caputchin\WP"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

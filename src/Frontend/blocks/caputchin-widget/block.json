@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "caputchin/widget",
+  "version": "0.1.0",
+  "title": "Caputchin",
+  "category": "widgets",
+  "icon": "shield",
+  "description": "Place the Caputchin verification widget on the page.",
+  "textdomain": "caputchin",
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "attributes": {
+    "skin": { "type": "string" },
+    "size": { "type": "string" },
+    "locale": { "type": "string" },
+    "invisible": { "type": "boolean", "default": false }
+  },
+  "editorScript": "file:./index.js"
+}
