@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "caputchin/game",
+  "version": "0.1.0",
+  "title": "Caputchin Game",
+  "category": "widgets",
+  "icon": "games",
+  "description": "Place the Caputchin game-challenge widget on the page.",
+  "textdomain": "caputchin",
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "attributes": {
+    "game": { "type": "string" },
+    "games": { "type": "string" },
+    "game-src": { "type": "string" },
+    "layout": { "type": "string" },
+    "skin": { "type": "string" },
+    "locale": { "type": "string" },
+    "width": { "type": "string" },
+    "height": { "type": "string" },
+    "no-verify": { "type": "boolean", "default": false }
+  },
+  "editorScript": "file:./index.js"
+}

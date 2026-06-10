@@ -36,6 +36,8 @@ final class Plugin {
 		( new Assets() )->hooks();
 		( new Frontend\Shortcode() )->hooks();
 		( new Frontend\Block() )->hooks();
+		( new Frontend\GameShortcode() )->hooks();
+		( new Frontend\GameBlock() )->hooks();
 		( new Integrations\Registry() )->boot();
 
 		if ( is_admin() ) {
