@@ -70,8 +70,27 @@ wp option update comment_moderation 0
 wp option update comment_previously_approved 0
 wp option update require_name_email 1
 
+# Pretty permalinks so the /caputchin-*-test/ URLs resolve to the right page.
+wp rewrite structure '/%postname%/' --hard
+wp rewrite flush --hard
+
+# Game-challenge demo page: [caputchin-game] renders the <caputchin-game> host,
+# which verifies the same way the widget does. Content refreshed on every run.
+caputchin_game_content='Game challenge below, placed with the shortcode:
+
+<pre><code>[[caputchin-game game="caputchin/games/leaf-memory" layout="inline"]]</code></pre>
+
+[caputchin-game game="caputchin/games/leaf-memory" layout="inline"]'
+caputchin_game_id="$(wp post list --post_type=page --post_status=publish --name=caputchin-game-test --field=ID)"
+if [ -n "$caputchin_game_id" ]; then
+	wp post update "$caputchin_game_id" --post_content="$caputchin_game_content"
+else
+	wp post create --post_type=page --post_status=publish --post_title="Caputchin Game Test" --post_name=caputchin-game-test --post_content="$caputchin_game_content"
+fi
+
 echo
 echo "Provisioning complete."
-echo "Test post:     http://localhost:8080/caputchin-live-test/"
+echo "Widget post:   http://localhost:8080/caputchin-live-test/"
+echo "Game page:     http://localhost:8080/caputchin-game-test/"
 echo "Admin:         http://localhost:8080/wp-admin/ (admin / admin)"
 echo "Plugin set up: Settings, Caputchin"
