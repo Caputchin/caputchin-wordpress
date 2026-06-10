@@ -82,4 +82,34 @@ final class GameMarkupTest extends TestCase {
 		);
 		$this->assertStringNotContainsString( 'no-verify', $off );
 	}
+
+	public function test_uses_configured_default_game_when_placement_sets_none(): void {
+		$this->with_settings(
+			array(
+				'sitekey' => 'cpt_pub_x',
+				'game'    => array(
+					'game'   => 'caputchin/games/x',
+					'layout' => 'inline',
+				),
+			)
+		);
+		$html = GameMarkup::render( array() );
+		$this->assertStringContainsString( 'game="caputchin/games/x"', $html );
+		$this->assertStringContainsString( 'layout="inline"', $html );
+	}
+
+	public function test_placement_game_overrides_configured_default(): void {
+		$this->with_settings(
+			array(
+				'sitekey' => 'cpt_pub_x',
+				'game'    => array(
+					'game'   => 'caputchin/games/fallback',
+					'layout' => 'inline',
+				),
+			)
+		);
+		$html = GameMarkup::render( array( 'game' => '@org/explicit' ) );
+		$this->assertStringContainsString( 'game="@org/explicit"', $html );
+		$this->assertStringNotContainsString( 'caputchin/games/fallback', $html );
+	}
 }

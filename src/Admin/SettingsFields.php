@@ -17,6 +17,7 @@ final class SettingsFields {
 	private const SKINS    = array( 'auto', 'light', 'dark' );
 	private const SIZES    = array( 'normal', 'compact' );
 	private const TRIGGERS = array( 'auto', 'click', 'form-submit', 'manual' );
+	private const LAYOUTS  = array( 'auto', 'inline', 'modal', 'fullscreen' );
 
 	/**
 	 * Sanitize callback registered with register_setting().
@@ -57,6 +58,10 @@ final class SettingsFields {
 		foreach ( array_keys( Options::integration_ids() ) as $id ) {
 			$out['integrations'][ $id ] = ! empty( $input['integrations'][ $id ] );
 		}
+
+		$out['game']['game']   = isset( $input['game']['game'] ) ? sanitize_text_field( $input['game']['game'] ) : '';
+		$game_layout           = isset( $input['game']['layout'] ) ? (string) $input['game']['layout'] : 'auto';
+		$out['game']['layout'] = in_array( $game_layout, self::LAYOUTS, true ) ? $game_layout : 'auto';
 
 		return $out;
 	}

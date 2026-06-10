@@ -49,6 +49,10 @@ final class Options {
 				'trigger'   => 'auto',
 			),
 			'integrations' => self::integration_ids(),
+			'game'         => array(
+				'game'   => '',
+				'layout' => 'auto',
+			),
 		);
 	}
 
@@ -76,6 +80,16 @@ final class Options {
 	 */
 	public static function appearance(): array {
 		return (array) self::all()['appearance'];
+	}
+
+	/**
+	 * Default game-host attributes (used when a [caputchin-game] / Game block
+	 * placement does not set its own).
+	 *
+	 * @return array<string,mixed>
+	 */
+	public static function game(): array {
+		return (array) self::all()['game'];
 	}
 
 	public static function is_integration_enabled( string $id ): bool {

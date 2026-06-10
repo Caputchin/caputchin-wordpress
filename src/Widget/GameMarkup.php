@@ -30,20 +30,31 @@ final class GameMarkup {
 			return '';
 		}
 
-		$appearance = Options::appearance();
-		$html       = '<caputchin-game sitekey="' . esc_attr( $sitekey ) . '"';
+		$appearance    = Options::appearance();
+		$game_defaults = Options::game();
+		$html          = '<caputchin-game sitekey="' . esc_attr( $sitekey ) . '"';
 
-		if ( ! empty( $atts['game'] ) ) {
-			$html .= ' game="' . esc_attr( (string) $atts['game'] ) . '"';
+		$games    = ! empty( $atts['games'] ) ? (string) $atts['games'] : '';
+		$game_src = ! empty( $atts['game-src'] ) ? (string) $atts['game-src'] : '';
+		// The configured default game id applies only when this placement names no
+		// source of its own; its own game / games / game-src always takes precedence.
+		$game = ! empty( $atts['game'] ) ? (string) $atts['game'] : '';
+		if ( '' === $game && '' === $games && '' === $game_src ) {
+			$game = (string) ( $game_defaults['game'] ?? '' );
 		}
-		if ( ! empty( $atts['games'] ) ) {
-			$html .= ' games="' . esc_attr( (string) $atts['games'] ) . '"';
+		if ( '' !== $game ) {
+			$html .= ' game="' . esc_attr( $game ) . '"';
 		}
-		if ( ! empty( $atts['game-src'] ) ) {
-			$html .= ' game-src="' . esc_url( (string) $atts['game-src'] ) . '"';
+		if ( '' !== $games ) {
+			$html .= ' games="' . esc_attr( $games ) . '"';
+		}
+		if ( '' !== $game_src ) {
+			$html .= ' game-src="' . esc_url( $game_src ) . '"';
 		}
 
-		$layout = isset( $atts['layout'] ) ? (string) $atts['layout'] : '';
+		$layout = ( isset( $atts['layout'] ) && '' !== $atts['layout'] )
+			? (string) $atts['layout']
+			: (string) ( $game_defaults['layout'] ?? 'auto' );
 		if ( in_array( $layout, self::LAYOUTS, true ) && 'auto' !== $layout ) {
 			$html .= ' layout="' . esc_attr( $layout ) . '"';
 		}
