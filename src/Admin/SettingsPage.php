@@ -24,6 +24,12 @@ final class SettingsPage {
 	private const GROUP = 'caputchin';
 	private const SLUG  = 'caputchin';
 
+	private const URL_DASHBOARD     = 'https://caputchin.com/app';
+	private const URL_MARKETPLACE   = 'https://caputchin.com/marketplace';
+	private const URL_DOCS          = 'https://docs.caputchin.com/en';
+	private const URL_DOC_SITE_KEYS = 'https://docs.caputchin.com/en/site-keys/overview';
+	private const URL_DOC_GAMES     = 'https://docs.caputchin.com/en/site-keys/games';
+
 	public function hooks(): void {
 		add_action( 'admin_menu', array( $this, 'add_page' ) );
 		add_action( 'admin_init', array( $this, 'register' ) );
@@ -111,6 +117,7 @@ final class SettingsPage {
 			'appearance' => __( 'Appearance', 'caputchin' ),
 			'forms'      => __( 'Protected forms', 'caputchin' ),
 			'game'       => __( 'Game', 'caputchin' ),
+			'guide'      => __( 'Guide', 'caputchin' ),
 		);
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only tab selector; no state change.
 		$active = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'keys';
@@ -122,7 +129,10 @@ final class SettingsPage {
 		?>
 		<div class="wrap">
 			<h1><?php echo esc_html__( 'Caputchin', 'caputchin' ); ?></h1>
-			<p><?php echo esc_html__( 'Add the Caputchin verification widget to your forms. Paste your keys, choose which forms to protect, then save.', 'caputchin' ); ?></p>
+			<p>
+				<?php echo esc_html__( 'Add the Caputchin verification widget to your forms. Paste your keys, choose which forms to protect, then save.', 'caputchin' ); ?>
+				<a href="<?php echo esc_url( self::URL_DOCS ); ?>" target="_blank" rel="noreferrer noopener"><?php echo esc_html__( 'Read the documentation', 'caputchin' ); ?></a>
+			</p>
 			<h2 class="nav-tab-wrapper">
 				<?php foreach ( $tabs as $slug => $label ) : ?>
 					<a href="<?php echo esc_url( admin_url( 'options-general.php?page=' . self::SLUG . '&tab=' . $slug ) ); ?>" class="nav-tab <?php echo esc_attr( $active === $slug ? 'nav-tab-active' : '' ); ?>"><?php echo esc_html( $label ); ?></a>
@@ -132,6 +142,12 @@ final class SettingsPage {
 				<?php settings_fields( self::GROUP ); ?>
 
 				<div class="caputchin-tab-panel"<?php echo self::panel_attr( 'keys', $active ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static literal attribute. ?>>
+					<p class="description">
+						<?php echo esc_html__( 'Create a site key and secret in your Caputchin dashboard, then paste them here.', 'caputchin' ); ?>
+						<a href="<?php echo esc_url( self::URL_DASHBOARD ); ?>" target="_blank" rel="noreferrer noopener"><?php echo esc_html__( 'Open the dashboard', 'caputchin' ); ?></a>
+						&middot;
+						<a href="<?php echo esc_url( self::URL_DOC_SITE_KEYS ); ?>" target="_blank" rel="noreferrer noopener"><?php echo esc_html__( 'Site key guide', 'caputchin' ); ?></a>
+					</p>
 					<table class="form-table" role="presentation">
 						<tr>
 							<th scope="row"><label for="caputchin-sitekey"><?php echo esc_html__( 'Site key', 'caputchin' ); ?></label></th>
@@ -229,7 +245,12 @@ final class SettingsPage {
 				</div>
 
 				<div class="caputchin-tab-panel"<?php echo self::panel_attr( 'game', $active ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static literal attribute. ?>>
-					<p class="description"><?php echo esc_html__( 'Defaults for the [caputchin-game] shortcode and the Caputchin Game block. Each placement can override them.', 'caputchin' ); ?></p>
+					<p class="description">
+						<?php echo esc_html__( 'Defaults for the [caputchin-game] shortcode and the Caputchin Game block. Each placement can override them.', 'caputchin' ); ?>
+						<a href="<?php echo esc_url( self::URL_MARKETPLACE ); ?>" target="_blank" rel="noreferrer noopener"><?php echo esc_html__( 'Browse games', 'caputchin' ); ?></a>
+						&middot;
+						<a href="<?php echo esc_url( self::URL_DOC_GAMES ); ?>" target="_blank" rel="noreferrer noopener"><?php echo esc_html__( 'Games and gating guide', 'caputchin' ); ?></a>
+					</p>
 					<table class="form-table" role="presentation">
 						<tr>
 							<th scope="row"><label for="caputchin-game-id"><?php echo esc_html__( 'Default game', 'caputchin' ); ?></label></th>
@@ -237,7 +258,7 @@ final class SettingsPage {
 								<input type="text" id="caputchin-game-id" class="regular-text" autocomplete="off"
 									name="<?php echo esc_attr( $name ); ?>[game][game]"
 									value="<?php echo esc_attr( $game['game'] ); ?>">
-								<p class="description"><?php echo esc_html__( 'A marketplace game id, such as caputchin/games/leaf-memory. Leave blank to choose the game on each placement.', 'caputchin' ); ?></p>
+								<p class="description"><?php echo esc_html__( 'A marketplace game id, such as caputchin/games/leaf-memory. Leave it blank to set the game on each shortcode or block instead, for example [caputchin-game game="caputchin/games/leaf-memory"] (see the Guide tab). If your site key requires a game, a blank setting lets Caputchin pick one at random from your installed games.', 'caputchin' ); ?></p>
 							</td>
 						</tr>
 						<tr>
@@ -254,7 +275,56 @@ final class SettingsPage {
 					</table>
 				</div>
 
-				<?php submit_button(); ?>
+				<div class="caputchin-tab-panel"<?php echo self::panel_attr( 'guide', $active ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static literal attribute. ?>>
+					<p class="description"><?php echo esc_html__( 'Enable a form on the Protected forms tab and the widget is added for you, no shortcode needed. To place it anywhere else, use a block or one of these shortcodes.', 'caputchin' ); ?></p>
+
+					<h2><?php echo esc_html__( 'The checkbox widget', 'caputchin' ); ?></h2>
+					<p class="description"><?php echo esc_html__( 'The verification checkbox. Inside a form it adds a hidden token your server confirms.', 'caputchin' ); ?></p>
+					<pre style="background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;padding:12px;overflow:auto;max-width:700px">[caputchin]
+[caputchin skin="dark" size="compact" locale="ar"]</pre>
+					<table class="widefat striped" style="max-width:700px">
+						<thead><tr><th><?php echo esc_html__( 'Attribute', 'caputchin' ); ?></th><th><?php echo esc_html__( 'Values', 'caputchin' ); ?></th></tr></thead>
+						<tbody>
+							<tr><td><code>skin</code></td><td>auto, light, dark</td></tr>
+							<tr><td><code>size</code></td><td>normal, compact</td></tr>
+							<tr><td><code>locale</code></td><td><?php echo esc_html__( 'a language code such as en or ar', 'caputchin' ); ?></td></tr>
+							<tr><td><code>trigger</code></td><td>auto, click, form-submit, manual</td></tr>
+							<tr><td><code>invisible</code></td><td>true, false</td></tr>
+						</tbody>
+					</table>
+
+					<h2><?php echo esc_html__( 'The game challenge', 'caputchin' ); ?></h2>
+					<p class="description"><?php echo esc_html__( 'A game instead of the checkbox. A passing game injects the same token.', 'caputchin' ); ?></p>
+					<pre style="background:#f6f7f7;border:1px solid #dcdcde;border-radius:4px;padding:12px;overflow:auto;max-width:700px">[caputchin-game game="caputchin/games/leaf-memory"]
+[caputchin-game game="caputchin/games/leaf-memory" layout="modal" skin="dark"]
+[caputchin-game games="caputchin/games/leaf-memory,caputchin/games/dino-runner"]</pre>
+					<table class="widefat striped" style="max-width:700px">
+						<thead><tr><th><?php echo esc_html__( 'Attribute', 'caputchin' ); ?></th><th><?php echo esc_html__( 'Values', 'caputchin' ); ?></th></tr></thead>
+						<tbody>
+							<tr><td><code>game</code></td><td><?php echo esc_html__( 'a marketplace game id, such as caputchin/games/leaf-memory', 'caputchin' ); ?></td></tr>
+							<tr><td><code>games</code></td><td><?php echo esc_html__( 'a comma-separated list of ids; one is chosen at random per visit', 'caputchin' ); ?></td></tr>
+							<tr><td><code>game-src</code></td><td><?php echo esc_html__( 'the URL of a self-hosted game', 'caputchin' ); ?></td></tr>
+							<tr><td><code>layout</code></td><td>inline, modal, fullscreen</td></tr>
+							<tr><td><code>skin</code>, <code>locale</code></td><td><?php echo esc_html__( 'same as the checkbox widget', 'caputchin' ); ?></td></tr>
+							<tr><td><code>width</code>, <code>height</code></td><td><?php echo esc_html__( 'full, or a pixel number', 'caputchin' ); ?></td></tr>
+							<tr><td><code>no-verify</code></td><td><?php echo esc_html__( 'true to run the game without the verification gate', 'caputchin' ); ?></td></tr>
+						</tbody>
+					</table>
+					<p class="description"><?php echo esc_html__( 'Leave game, games, and game-src off to use the Game tab default, or to let Caputchin pick a random installed game when your site key requires one.', 'caputchin' ); ?></p>
+
+					<h2><?php echo esc_html__( 'Blocks', 'caputchin' ); ?></h2>
+					<p class="description"><?php echo esc_html__( 'In the block editor, add the Caputchin block (checkbox) or the Caputchin Game block. The Game block sidebar offers the same options, so no markup is needed.', 'caputchin' ); ?></p>
+
+					<p>
+						<a href="<?php echo esc_url( self::URL_DOCS ); ?>" target="_blank" rel="noreferrer noopener"><?php echo esc_html__( 'Full documentation', 'caputchin' ); ?></a>
+					</p>
+				</div>
+
+				<?php
+				if ( 'guide' !== $active ) {
+					submit_button();
+				}
+				?>
 			</form>
 		</div>
 		<?php
