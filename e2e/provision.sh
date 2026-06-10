@@ -45,17 +45,21 @@ else
 	echo "         Mint a dev site key (see README.md), export CPT_PUB and CPT_SEC, then re-run."
 fi
 
-# Comment-form test post (idempotent by slug). The comment form exercises the
-# WPComment adapter end to end without any third-party form plugin.
-if ! wp post list --post_type=post --post_status=publish --name="caputchin-live-test" --field=ID | grep -q .; then
+# Test post. The [caputchin] shortcode renders the widget in the post body
+# (theme-independent). The comment form, where the theme renders one, also
+# exercises the WPComment adapter. Content is refreshed on every run.
+caputchin_post_content='The Caputchin widget renders below via the [caputchin] shortcode.
+
+[caputchin]
+
+Leave a comment to exercise the comment-form integration too.'
+caputchin_post_id="$(wp post list --post_type=post --post_status=publish --name=caputchin-live-test --field=ID)"
+if [ -n "$caputchin_post_id" ]; then
+	echo "Updating the test post..."
+	wp post update "$caputchin_post_id" --post_content="$caputchin_post_content" --comment_status=open
+else
 	echo "Creating the test post..."
-	wp post create \
-		--post_type=post \
-		--post_status=publish \
-		--post_title="Caputchin Live Test" \
-		--post_name="caputchin-live-test" \
-		--post_content="Leave a comment below to exercise the Caputchin widget on the WordPress comment form." \
-		--comment_status=open
+	wp post create --post_type=post --post_status=publish --post_title="Caputchin Live Test" --post_name=caputchin-live-test --post_content="$caputchin_post_content" --comment_status=open
 fi
 
 # Let logged-out comments post without manual approval so the live test gets a
