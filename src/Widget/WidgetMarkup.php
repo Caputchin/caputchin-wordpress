@@ -44,9 +44,12 @@ final class WidgetMarkup {
 		}
 
 		// Trigger comes from the configured default (merged above) or a per-call
-		// override. 'auto' is the widget's own default, so omit the attribute then.
+		// override (shortcode/block). Emit only a recognized non-default trigger;
+		// 'auto', empty, or any unrecognized value falls through to the widget's
+		// own default (auto). This validates the override path the same way the
+		// settings sanitizer validates the stored default.
 		$trigger = isset( $appearance['trigger'] ) ? (string) $appearance['trigger'] : 'auto';
-		if ( '' !== $trigger && 'auto' !== $trigger ) {
+		if ( in_array( $trigger, array( 'click', 'form-submit', 'manual' ), true ) ) {
 			$attrs['trigger'] = $trigger;
 		}
 
