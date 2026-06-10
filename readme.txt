@@ -2,7 +2,7 @@
 Contributors: caputchin
 Tags: captcha, spam, bot, privacy, gdpr
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 0.1.0
 License: GPLv2 or later
@@ -20,7 +20,7 @@ How it works: the Caputchin widget runs on the visitor's page and produces a sin
 
 * The WordPress comment form
 * The login, registration, and lost-password forms
-* Contact Form 7
+* Contact Form 7, WPForms, and Fluent Forms
 * Any page or post: the Caputchin block or the `[caputchin]` shortcode for the checkbox widget, or the Caputchin Game block or the `[caputchin-game]` shortcode for a game challenge
 
 = Privacy =
@@ -71,7 +71,7 @@ Yes. Use the Caputchin block or the `[caputchin]` shortcode to place the widget,
 
 = Which form plugins are supported? =
 
-This release protects the WordPress core forms and Contact Form 7.
+This release protects the WordPress core forms, Contact Form 7, WPForms, and Fluent Forms.
 
 = Can I use a game instead of the checkbox? =
 
@@ -79,14 +79,16 @@ Yes. The `[caputchin-game]` shortcode and the Caputchin Game block place a game 
 
 == Screenshots ==
 
-1. The Caputchin settings page: paste your keys, set the default widget appearance, and choose which forms to protect.
-2. The widget placed in page content with the `[caputchin]` shortcode.
-3. The widget protecting the WordPress login form.
+1. The settings page: keys, appearance, protected forms, and game defaults, organized into tabs.
+2. The checkbox widget placed in content with the `[caputchin]` shortcode.
+3. The game challenge placed with the `[caputchin-game]` shortcode.
+4. The widget protecting the WordPress login form.
+5. The widget protecting a Contact Form 7 form.
 
 == Changelog ==
 
 = 0.1.0 =
-* Initial release. Protects the WordPress comment, login, registration, and lost-password forms, plus Contact Form 7. Includes a block and a `[caputchin]` shortcode. Verification runs server-side and fails closed.
+* Initial release. Protects the WordPress comment, login, registration, and lost-password forms, plus Contact Form 7, WPForms, and Fluent Forms. Includes blocks and shortcodes for the checkbox widget (`[caputchin]`) and a game challenge (`[caputchin-game]`), and a tabbed settings page. Verification runs server-side and fails closed.
 
 == Upgrade Notice ==
 
