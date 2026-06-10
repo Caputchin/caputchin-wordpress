@@ -5,8 +5,8 @@
 .phpcs.cache
 
 # Local Docker test environment state + the local site key/secret compose loads
-/test/.wp-data/
-/test/.env
+/e2e/.wp-data/
+/e2e/.env
 
 # Maintainer-local compose override (points the test env at a local dev stack)
-/test/docker-compose.override.yml
+/e2e/docker-compose.override.yml

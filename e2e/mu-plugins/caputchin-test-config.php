@@ -3,7 +3,7 @@
  * Optional test-environment overrides, read from the container environment.
  *
  * This is NOT part of the shipped plugin. It is mounted into wp-content/mu-plugins
- * only by test/docker-compose.yml, and mu-plugins load before regular plugins,
+ * only by e2e/docker-compose.yml, and mu-plugins load before regular plugins,
  * so these defines win over the plugin defaults.
  *
  * With no overrides set, nothing is defined here and the plugin uses its

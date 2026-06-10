@@ -24,7 +24,7 @@ src/                   Namespaced source (Caputchin\WP)
   Admin/               Settings page
   Frontend/            Block + shortcode
   Integrations/        One adapter per supported form
-test/                  Dockerized WordPress for local end-to-end testing
+e2e/                   Dockerized WordPress for local end-to-end testing
 ```
 
 ## Local development
@@ -37,7 +37,7 @@ composer lint     # phpcs (WordPress Coding Standards)
 composer test     # phpunit
 ```
 
-A full local environment that runs the widget end-to-end against a local verification backend is in [`test/`](test/) (Docker). See `test/README.md`.
+A full local environment that runs the widget end-to-end against a local verification backend is in [`e2e/`](e2e/) (Docker). See `e2e/README.md`.
 
 ## License
 
