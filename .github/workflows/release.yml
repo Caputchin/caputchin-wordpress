@@ -6,11 +6,14 @@ name: release
 #    computed version bump, the CHANGELOG update, and the version synced into
 #    caputchin.php (plugin header + CAPUTCHIN_VERSION) via the configured
 #    extra-files.
-# 2. Merging that PR creates the git tag + GitHub Release (notes from commits).
-#
-# Publishing to the WordPress.org SVN happens in a separate, later step: it is
-# gated on a wp.org account + an approved plugin slug + the WPORG_SVN_*
-# repository secrets, none of which exist yet (see RELEASING.md).
+# 2. Merging that PR creates the git tag + GitHub Release.
+# 3. The package job builds the distribution zip (dev files stripped via
+#    .distignore) and attaches it to the GitHub Release, so the zip used for a
+#    WordPress.org review submission is always a CI build, never a hand-zipped tree.
+# 4. The deploy job pushes trunk + tags/<v> + the .wordpress-org listing assets to
+#    the WordPress.org SVN. It stays inert until the plugin slug is approved and
+#    the WPORG_PUBLISH repository variable is set to "true" alongside the
+#    WPORG_SVN_* secrets (see RELEASING.md).
 #
 # Prereq: a GitHub App with RELEASE_APP_ID / RELEASE_APP_PRIVATE_KEY granted to
 # this repo as organization secrets.
@@ -27,6 +30,9 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       # App token (not GITHUB_TOKEN) so the release PR's commits trigger CI and
       # the push can pass branch protection.
@@ -37,5 +43,51 @@ jobs:
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
 
       - uses: googleapis/release-please-action@v5
+        id: release
         with:
           token: ${{ steps.app-token.outputs.token }}
+
+  # Build the user-facing plugin zip (dev files stripped via .distignore) and
+  # attach it to the release, so a WordPress.org submission always uses a CI build.
+  package:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build distribution zip
+        run: |
+          mkdir -p build/caputchin
+          rsync -a --exclude='/.git' --exclude='/build' --exclude-from=.distignore ./ build/caputchin/
+          ( cd build && zip -rq caputchin.zip caputchin )
+      - name: Attach the zip to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: gh release upload "$TAG" build/caputchin.zip --clobber
+
+  # Publish to the WordPress.org SVN. Inert until the slug is approved: set the
+  # WPORG_PUBLISH repository variable to "true" and add the WPORG_SVN_* secrets.
+  deploy:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' && vars.WPORG_PUBLISH == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # release-please bumps the version in caputchin.php but the readme Stable
+      # tag is left out of the markers (the wp.org readme header is fragile with
+      # version markers), so sync it to the released version here, deterministically.
+      - name: Sync the readme Stable tag to the released version
+        env:
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          version="${TAG#v}"
+          sed -i "s/^Stable tag: .*/Stable tag: ${version}/" readme.txt
+      - name: Deploy to WordPress.org
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        with:
+          generate-zip: true
+        env:
+          SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
+          SLUG: caputchin

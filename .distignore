@@ -1,0 +1,23 @@
+# Paths excluded from the WordPress.org build (the trunk that ships to users).
+# Consumed by .github/workflows/release.yml (the package + deploy jobs) and by
+# the WordPress.org deploy action. Listing assets live in .wordpress-org/ and
+# are published to the SVN assets/ directory by the deploy action, not shipped
+# inside the plugin, so they are excluded from trunk here too.
+/.git
+/.github
+/.gitignore
+/.distignore
+/.phpunit.result.cache
+/.release-please-manifest.json
+/release-please-config.json
+/.wordpress-org
+/README.md
+/RELEASING.md
+/composer.json
+/composer.lock
+/phpcs.xml.dist
+/phpunit.xml.dist
+/vendor
+/tests
+/e2e
+/docs
