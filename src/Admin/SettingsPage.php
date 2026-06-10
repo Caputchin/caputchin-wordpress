@@ -75,8 +75,6 @@ final class SettingsPage {
 			'wp_lost_password' => __( 'Lost password form', 'caputchin' ),
 			'cf7'              => __( 'Contact Form 7', 'caputchin' ),
 			'wpforms'          => __( 'WPForms', 'caputchin' ),
-			'elementor_pro'    => __( 'Elementor Pro Forms', 'caputchin' ),
-			'gravity_forms'    => __( 'Gravity Forms', 'caputchin' ),
 			'fluent_forms'     => __( 'Fluent Forms', 'caputchin' ),
 		);
 	}

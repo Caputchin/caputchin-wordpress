@@ -22,6 +22,8 @@ final class Registry {
 		WPRegister::class,
 		WPLostPassword::class,
 		ContactForm7::class,
+		WPForms::class,
+		FluentForms::class,
 	);
 
 	public function boot(): void {

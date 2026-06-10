@@ -30,8 +30,6 @@ final class Options {
 			'wp_lost_password' => true,
 			'cf7'              => true,
 			'wpforms'          => true,
-			'elementor_pro'    => true,
-			'gravity_forms'    => true,
 			'fluent_forms'     => true,
 		);
 	}

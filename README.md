@@ -12,8 +12,8 @@ User-facing documentation lives in [`readme.txt`](readme.txt) (the WordPress.org
 ## Coverage
 
 - WordPress core comment, login, registration, and lost-password forms.
-- Contact Form 7, WPForms, Elementor Pro Forms, Gravity Forms, Fluent Forms.
-- A block and a `[caputchin]` shortcode for anywhere else.
+- Contact Form 7, WPForms, Fluent Forms.
+- Blocks and shortcodes for anywhere else: `[caputchin]` (checkbox widget) and `[caputchin-game]` (game).
 
 ## Layout
 

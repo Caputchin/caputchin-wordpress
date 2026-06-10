@@ -3,7 +3,9 @@
  * Plugin Name:       Caputchin
  * Plugin URI:        https://caputchin.com
  * Description:       Add the Caputchin bot-verification widget to WordPress forms and verify on your server. Privacy-first, surveillance-free.
+ * x-release-please-start-version
  * Version:           0.1.0
+ * x-release-please-end
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Caputchin
@@ -20,7 +22,9 @@ namespace Caputchin\WP;
 
 defined( 'ABSPATH' ) || exit;
 
+/* x-release-please-start-version */
 define( 'CAPUTCHIN_VERSION', '0.1.0' );
+/* x-release-please-end */
 define( 'CAPUTCHIN_FILE', __FILE__ );
 define( 'CAPUTCHIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CAPUTCHIN_URL', plugin_dir_url( __FILE__ ) );
@@ -68,4 +72,7 @@ spl_autoload_register(
 	}
 );
 
-Plugin::instance()->boot();
+// Boot on plugins_loaded so that adapters detecting other plugins (Contact
+// Form 7, WPForms, Fluent Forms) see them: those plugins load after this one
+// and only their presence at boot decides whether an adapter registers.
+add_action( 'plugins_loaded', array( Plugin::instance(), 'boot' ) );
