@@ -8,26 +8,31 @@ namespace Caputchin\WP;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Registers the Caputchin widget loader and enqueues it only on requests that
- * actually render a widget.
+ * Registers the Caputchin widget loader plus a small layout stylesheet, and
+ * enqueues them only on requests that actually render a widget.
  */
 final class Assets {
 
-	private const HANDLE = 'caputchin-widget';
+	private const SCRIPT_HANDLE = 'caputchin-widget';
+	private const STYLE_HANDLE  = 'caputchin-widget-layout';
 
 	public function hooks(): void {
-		add_action( 'wp_enqueue_scripts', array( $this, 'register' ) );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_assets' ) );
 		add_filter( 'script_loader_tag', array( $this, 'add_defer' ), 10, 2 );
 	}
 
 	/**
-	 * Register (not enqueue) on the front end so render paths can enqueue on
-	 * demand and the script only loads on pages that show a widget.
+	 * Register (not enqueue) the loader script and the layout stylesheet, so
+	 * render paths enqueue on demand and the assets load only on pages that show
+	 * a widget.
 	 */
-	public function register(): void {
-		if ( ! wp_script_is( self::HANDLE, 'registered' ) ) {
+	public static function register_assets(): void {
+		if ( ! wp_script_is( self::SCRIPT_HANDLE, 'registered' ) ) {
 			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- the version is pinned in the CDN path; a query version arg would defeat immutable caching.
-			wp_register_script( self::HANDLE, self::src(), array(), null, true );
+			wp_register_script( self::SCRIPT_HANDLE, self::src(), array(), null, true );
+		}
+		if ( ! wp_style_is( self::STYLE_HANDLE, 'registered' ) ) {
+			wp_register_style( self::STYLE_HANDLE, CAPUTCHIN_URL . 'assets/caputchin.css', array(), CAPUTCHIN_VERSION );
 		}
 	}
 
@@ -41,16 +46,14 @@ final class Assets {
 	}
 
 	/**
-	 * Mark the widget script for output on this request. Safe to call from a
+	 * Mark the widget assets for output on this request. Safe to call from a
 	 * render hook; registers on the fly if early registration has not run (for
 	 * example on wp-login.php).
 	 */
 	public static function enqueue(): void {
-		if ( ! wp_script_is( self::HANDLE, 'registered' ) ) {
-			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- the version is pinned in the CDN path; a query version arg would defeat immutable caching.
-			wp_register_script( self::HANDLE, self::src(), array(), null, true );
-		}
-		wp_enqueue_script( self::HANDLE );
+		self::register_assets();
+		wp_enqueue_script( self::SCRIPT_HANDLE );
+		wp_enqueue_style( self::STYLE_HANDLE );
 	}
 
 	/**
@@ -62,7 +65,7 @@ final class Assets {
 	 * @param string $handle The script handle.
 	 */
 	public function add_defer( string $tag, string $handle ): string {
-		if ( self::HANDLE !== $handle ) {
+		if ( self::SCRIPT_HANDLE !== $handle ) {
 			return $tag;
 		}
 		if ( false !== strpos( $tag, ' defer' ) ) {

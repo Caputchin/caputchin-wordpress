@@ -1,0 +1,18 @@
+/*
+ * The Caputchin widget is a block-level panel so it flows with the page and
+ * respects theme content alignment (for example the centered, width-constrained
+ * content column of the default block themes). Without this it computes as an
+ * inline custom element, which ignores the auto margins and max-width those
+ * themes set on it, leaving it left-aligned and full-width.
+ *
+ * margin-block gives it breathing room from adjacent form fields (for example
+ * on wp-login.php, where it would otherwise sit flush against the password
+ * field and the submit row). Only the block-axis margins are set; the inline
+ * (left/right) margins are left untouched so a theme's auto-margin centering
+ * still applies. The unit is rem, not em: the widget sets font-size 0 on its
+ * host, so an em-based margin would resolve to 0.
+ */
+caputchin-widget {
+	display: block;
+	margin-block: 1rem;
+}
