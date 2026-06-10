@@ -4,8 +4,9 @@
 .phpunit.result.cache
 .phpcs.cache
 
-# Local Docker test environment state
+# Local Docker test environment state + the local site key/secret compose loads
 /test/.wp-data/
+/test/.env
 
 # Maintainer-local compose override (points the test env at a local dev stack)
 /test/docker-compose.override.yml
