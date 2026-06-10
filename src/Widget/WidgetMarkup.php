@@ -43,8 +43,11 @@ final class WidgetMarkup {
 			$attrs['locale'] = $locale;
 		}
 
-		if ( ! empty( $overrides['trigger'] ) ) {
-			$attrs['trigger'] = (string) $overrides['trigger'];
+		// Trigger comes from the configured default (merged above) or a per-call
+		// override. 'auto' is the widget's own default, so omit the attribute then.
+		$trigger = isset( $appearance['trigger'] ) ? (string) $appearance['trigger'] : 'auto';
+		if ( '' !== $trigger && 'auto' !== $trigger ) {
+			$attrs['trigger'] = $trigger;
 		}
 
 		$html = '<caputchin-widget';

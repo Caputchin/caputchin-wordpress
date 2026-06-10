@@ -48,6 +48,7 @@ final class Options {
 				'size'      => 'normal',
 				'locale'    => '',
 				'invisible' => false,
+				'trigger'   => 'auto',
 			),
 			'integrations' => self::integration_ids(),
 		);

@@ -16,6 +16,7 @@
     "skin": { "type": "string" },
     "size": { "type": "string" },
     "locale": { "type": "string" },
+    "trigger": { "type": "string" },
     "invisible": { "type": "boolean", "default": false }
   },
   "editorScript": "file:./index.js"

@@ -37,7 +37,9 @@ final class ContactForm7 extends AbstractIntegration {
 	 * @param string $elements The rendered form inner HTML.
 	 */
 	public function append_widget( $elements ): string {
-		return (string) $elements . $this->widget_field( '' );
+		// Force 'auto': Contact Form 7 submits over AJAX and runs its own submit
+		// handler, so a form-submit trigger would clash with it.
+		return (string) $elements . $this->widget_field( 'auto' );
 	}
 
 	/**

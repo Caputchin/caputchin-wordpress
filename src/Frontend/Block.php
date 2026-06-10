@@ -34,7 +34,7 @@ final class Block {
 		$attributes = is_array( $attributes ) ? $attributes : array();
 
 		$overrides = array();
-		foreach ( array( 'skin', 'size', 'locale' ) as $key ) {
+		foreach ( array( 'skin', 'size', 'locale', 'trigger' ) as $key ) {
 			if ( isset( $attributes[ $key ] ) && '' !== $attributes[ $key ] ) {
 				$overrides[ $key ] = (string) $attributes[ $key ];
 			}

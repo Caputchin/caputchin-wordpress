@@ -58,17 +58,18 @@ abstract class AbstractIntegration implements IntegrationInterface {
 	/**
 	 * Markup for the widget inside a form.
 	 *
-	 * Native (non-AJAX) forms pass the default 'form-submit' trigger so the
-	 * widget gates the native submit. AJAX form plugins, which run their own
-	 * submit handler, pass '' to leave the widget on its default trigger and
-	 * rely on the server-side check instead.
+	 * Pass null (the default) to use the trigger configured in settings. An
+	 * adapter passes an explicit trigger only to override that where the
+	 * configured value would clash with the host plugin's own submit handling
+	 * (for example an AJAX form plugin).
 	 *
-	 * @param string $trigger Widget trigger, or '' to omit the attribute.
+	 * @param string|null $trigger Explicit trigger override, or null for the
+	 *                             configured default.
 	 */
-	protected function widget_field( string $trigger = 'form-submit' ): string {
+	protected function widget_field( ?string $trigger = null ): string {
 		Assets::enqueue();
 		$overrides = array();
-		if ( '' !== $trigger ) {
+		if ( null !== $trigger ) {
 			$overrides['trigger'] = $trigger;
 		}
 		return WidgetMarkup::render( $overrides );

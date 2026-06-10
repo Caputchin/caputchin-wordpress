@@ -21,6 +21,7 @@ final class SettingsPage {
 	public function hooks(): void {
 		add_action( 'admin_menu', array( $this, 'add_page' ) );
 		add_action( 'admin_init', array( $this, 'register' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( CAPUTCHIN_FILE ), array( $this, 'action_links' ) );
 	}
 
 	public function add_page(): void {
@@ -31,6 +32,22 @@ final class SettingsPage {
 			self::SLUG,
 			array( $this, 'render' )
 		);
+	}
+
+	/**
+	 * Add a Settings link to the plugin's row on the Plugins screen.
+	 *
+	 * @param string[] $links Existing action links.
+	 * @return string[]
+	 */
+	public function action_links( $links ): array {
+		$settings = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( admin_url( 'options-general.php?page=' . self::SLUG ) ),
+			esc_html__( 'Settings', 'caputchin' )
+		);
+		array_unshift( $links, $settings );
+		return $links;
 	}
 
 	public function register(): void {
@@ -120,6 +137,18 @@ final class SettingsPage {
 								<option value="normal" <?php selected( $appearance['size'], 'normal' ); ?>><?php echo esc_html__( 'Normal', 'caputchin' ); ?></option>
 								<option value="compact" <?php selected( $appearance['size'], 'compact' ); ?>><?php echo esc_html__( 'Compact', 'caputchin' ); ?></option>
 							</select>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="caputchin-trigger"><?php echo esc_html__( 'Trigger', 'caputchin' ); ?></label></th>
+						<td>
+							<select id="caputchin-trigger" name="<?php echo esc_attr( Options::OPTION_KEY ); ?>[appearance][trigger]">
+								<option value="auto" <?php selected( $appearance['trigger'], 'auto' ); ?>><?php echo esc_html__( 'Auto (verify on load)', 'caputchin' ); ?></option>
+								<option value="click" <?php selected( $appearance['trigger'], 'click' ); ?>><?php echo esc_html__( 'On click', 'caputchin' ); ?></option>
+								<option value="form-submit" <?php selected( $appearance['trigger'], 'form-submit' ); ?>><?php echo esc_html__( 'On form submit', 'caputchin' ); ?></option>
+								<option value="manual" <?php selected( $appearance['trigger'], 'manual' ); ?>><?php echo esc_html__( 'Manual', 'caputchin' ); ?></option>
+							</select>
+							<p class="description"><?php echo esc_html__( 'When verification runs. Auto suits most placements; On form submit gates a form until the visitor passes.', 'caputchin' ); ?></p>
 						</td>
 					</tr>
 					<tr>
