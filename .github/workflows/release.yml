@@ -1,0 +1,41 @@
+name: release
+
+# release-please drives versioning + the changelog from Conventional Commits.
+#
+# 1. On every push to main it maintains an open "release vX.Y.Z" PR with the
+#    computed version bump, the CHANGELOG update, and the version synced into
+#    caputchin.php (plugin header + CAPUTCHIN_VERSION) via the configured
+#    extra-files.
+# 2. Merging that PR creates the git tag + GitHub Release (notes from commits).
+#
+# Publishing to the WordPress.org SVN happens in a separate, later step: it is
+# gated on a wp.org account + an approved plugin slug + the WPORG_SVN_*
+# repository secrets, none of which exist yet (see RELEASING.md).
+#
+# Prereq: a GitHub App with RELEASE_APP_ID / RELEASE_APP_PRIVATE_KEY granted to
+# this repo as organization secrets.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      # App token (not GITHUB_TOKEN) so the release PR's commits trigger CI and
+      # the push can pass branch protection.
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      - uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ steps.app-token.outputs.token }}
