@@ -10,3 +10,6 @@
 
 # Maintainer-local compose override (points the test env at a local dev stack)
 /e2e/docker-compose.override.yml
+
+# Session-local QA notes (internal; never shipped in the public plugin)
+/docs/qa-notes/
