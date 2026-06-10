@@ -32,7 +32,6 @@ final class Plugin {
 	 * lands.
 	 */
 	public function boot(): void {
-		add_action( 'init', array( I18n::class, 'load' ) );
 		( new Assets() )->hooks();
 		( new Frontend\Shortcode() )->hooks();
 		( new Frontend\Block() )->hooks();
