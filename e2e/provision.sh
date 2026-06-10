@@ -48,7 +48,11 @@ fi
 # Test post. The [caputchin] shortcode renders the widget in the post body
 # (theme-independent). The comment form, where the theme renders one, also
 # exercises the WPComment adapter. Content is refreshed on every run.
-caputchin_post_content='Caputchin verification widget, placed with the shortcode:
+caputchin_post_content='Add the Caputchin widget to any page or post with the shortcode:
+
+<pre><code>[[caputchin]]</code></pre>
+
+It renders the live widget:
 
 [caputchin]'
 caputchin_post_id="$(wp post list --post_type=post --post_status=publish --name=caputchin-live-test --field=ID)"
