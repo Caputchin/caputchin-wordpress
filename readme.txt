@@ -21,7 +21,7 @@ How it works: the Caputchin widget runs on the visitor's page and produces a sin
 * The WordPress comment form
 * The login, registration, and lost-password forms
 * Contact Form 7
-* Any page or post, using the Caputchin block or the `[caputchin]` shortcode
+* Any page or post: the Caputchin block or the `[caputchin]` shortcode for the checkbox widget, or the Caputchin Game block or the `[caputchin-game]` shortcode for a game challenge
 
 = Privacy =
 
@@ -72,6 +72,10 @@ Yes. Use the Caputchin block or the `[caputchin]` shortcode to place the widget,
 = Which form plugins are supported? =
 
 This release protects the WordPress core forms and Contact Form 7.
+
+= Can I use a game instead of the checkbox? =
+
+Yes. The `[caputchin-game]` shortcode and the Caputchin Game block place a game challenge instead of the checkbox. It verifies the same way: a passing game injects the token your server confirms.
 
 == Screenshots ==
 
