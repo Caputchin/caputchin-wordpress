@@ -28,8 +28,8 @@ final class Assets {
 	 */
 	public static function register_assets(): void {
 		if ( ! wp_script_is( self::SCRIPT_HANDLE, 'registered' ) ) {
-			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- the version is pinned in the CDN path; a query version arg would defeat immutable caching.
-			wp_register_script( self::SCRIPT_HANDLE, self::src(), array(), null, true );
+			// The bundle ships with the plugin, so the plugin version busts caches when it changes.
+			wp_register_script( self::SCRIPT_HANDLE, self::src(), array(), CAPUTCHIN_VERSION, true );
 		}
 		if ( ! wp_style_is( self::STYLE_HANDLE, 'registered' ) ) {
 			wp_register_style( self::STYLE_HANDLE, CAPUTCHIN_URL . 'assets/caputchin.css', array(), CAPUTCHIN_VERSION );
@@ -37,7 +37,7 @@ final class Assets {
 	}
 
 	/**
-	 * The widget loader URL. Defaults to the published bundle; a site can
+	 * The widget loader URL. Defaults to the bundle shipped in the plugin; a site can
 	 * repoint it with the CAPUTCHIN_WIDGET_SRC constant or this filter (used by
 	 * the local test environment to serve a locally built bundle).
 	 */

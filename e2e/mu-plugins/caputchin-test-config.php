@@ -7,7 +7,8 @@
  * so these defines win over the plugin defaults.
  *
  * With no overrides set, nothing is defined here and the plugin uses its
- * defaults: the published widget bundle and the hosted verification service.
+ * defaults: the widget bundle shipped in assets/widget/ and the hosted
+ * verification service.
  * Setting CAPUTCHIN_WIDGET_SRC or CAPUTCHIN_VERIFY_URL in the environment points
  * the widget or the server-side check at a different build or endpoint.
  *
