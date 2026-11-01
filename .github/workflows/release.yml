@@ -55,6 +55,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Same Stable tag sync as the deploy job: Plugin Check rejects a zip whose
+      # readme Stable tag differs from the plugin header Version (stable_tag_mismatch).
+      - name: Sync the readme Stable tag to the released version
+        env:
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          version="${TAG##*-v}"
+          sed -i "s/^Stable tag: .*/Stable tag: ${version}/" readme.txt
+          grep -qx "Stable tag: ${version}" readme.txt
+          # Fails the job if the tag format drifts from the plugin header Version.
+          grep -qE "^ \* Version: +${version}\$" caputchin.php
       - name: Build distribution zip
         run: |
           mkdir -p build/caputchin
@@ -77,12 +88,18 @@ jobs:
       # release-please bumps the version in caputchin.php but the readme Stable
       # tag is left out of the markers (the wp.org readme header is fragile with
       # version markers), so sync it to the released version here, deterministically.
+      # Tags are "caputchin-wordpress-v<version>" (release-please component tags).
       - name: Sync the readme Stable tag to the released version
+        id: version
         env:
           TAG: ${{ needs.release-please.outputs.tag_name }}
         run: |
-          version="${TAG#v}"
+          version="${TAG##*-v}"
           sed -i "s/^Stable tag: .*/Stable tag: ${version}/" readme.txt
+          grep -qx "Stable tag: ${version}" readme.txt
+          # Fails the job if the tag format drifts from the plugin header Version.
+          grep -qE "^ \* Version: +${version}\$" caputchin.php
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
       - name: Deploy to WordPress.org
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
@@ -91,3 +108,6 @@ jobs:
           SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
           SLUG: caputchin
+          # This job runs on a push to main, not a tag push, so the action's
+          # default (the version from GITHUB_REF) would be "refs/heads/main".
+          VERSION: ${{ steps.version.outputs.version }}

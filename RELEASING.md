@@ -29,4 +29,4 @@ Once the slug is approved, the `deploy` job pushes `trunk/`, `tags/<version>/`, 
 1. Add the `WPORG_SVN_USERNAME` and `WPORG_SVN_PASSWORD` repository secrets (the WordPress.org account credentials).
 2. Set the `WPORG_PUBLISH` repository variable to `true`.
 
-The deploy job syncs `readme.txt`'s `Stable tag` to the released version before pushing, so the served version always matches the tag without keeping a version marker in the readme header. Until both the variable and the secrets are set, every release still tags, builds, and attaches the zip, but skips the SVN push.
+The package and deploy jobs sync `readme.txt`'s `Stable tag` to the released version before zipping and pushing, so the attached zip passes Plugin Check's `stable_tag_mismatch` check and the served version always matches the tag, without keeping a version marker in the readme header. The deploy job passes that version to the deploy action as `VERSION`, since the workflow runs on a push to `main`, not on a tag. Until both the variable and the secrets are set, every release still tags, builds, and attaches the zip, but skips the SVN push.
