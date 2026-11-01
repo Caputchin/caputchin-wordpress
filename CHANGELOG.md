@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.1](https://github.com/Caputchin/caputchin-wordpress/compare/caputchin-wordpress-v0.1.0...caputchin-wordpress-v0.1.1) (2026-11-01)
+
+
+### Bug Fixes
+
+* **ci:** sync the readme Stable tag in the release zip and pass the version to the wordpress.org deploy ([d3794e9](https://github.com/Caputchin/caputchin-wordpress/commit/d3794e993e19d87b12745ecec71e84f14d615e4a))
+* **ci:** sync the readme Stable tag in the release zip and pass the version to the wordpress.org deploy ([fa76e32](https://github.com/Caputchin/caputchin-wordpress/commit/fa76e32037ef259d6dcaf9648eb7f88f442fda94))
+* ship the widget bundle in the plugin and document external services for wordpress.org ([2ea99e2](https://github.com/Caputchin/caputchin-wordpress/commit/2ea99e2c59757fc8c0027e044665c9067fa3f081))
+* ship the widget bundle in the plugin instead of loading it from jsDelivr ([d951570](https://github.com/Caputchin/caputchin-wordpress/commit/d95157039054823bfa028d7fafd3c18a55a390e3))
+
 ## 0.1.0 (2026-06-10)
 
 
