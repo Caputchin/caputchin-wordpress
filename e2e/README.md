@@ -2,7 +2,7 @@
 
 Runs a real WordPress at `http://localhost:8080` with the Caputchin plugin active, so you can exercise the widget end to end on a real site.
 
-By default the widget loads from the published bundle and submissions are verified against the hosted Caputchin service, so all you need is a site key.
+By default the widget loads from the bundle shipped in `assets/widget/` and submissions are verified against the hosted Caputchin service, so all you need is a site key.
 
 ## Prerequisites
 

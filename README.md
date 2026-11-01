@@ -24,6 +24,8 @@ src/                   Namespaced source (Caputchin\WP)
   Admin/               Settings page
   Frontend/            Block + shortcode
   Integrations/        One adapter per supported form
+assets/widget/         The published @caputchin/widget bundle, served by the site
+bin/vendor-widget.sh   Refreshes assets/widget/ from npm (exact version)
 e2e/                   Dockerized WordPress for local end-to-end testing
 ```
 
@@ -36,6 +38,8 @@ composer install
 composer lint     # phpcs (WordPress Coding Standards)
 composer test     # phpunit
 ```
+
+The widget bundle is vendored, not loaded from a CDN (WordPress.org requires plugin JavaScript to ship locally). To move to a new widget release, run `bin/vendor-widget.sh <version>` with an exact version and commit `assets/widget/`.
 
 A full local environment that runs the widget end-to-end against a local verification backend is in [`e2e/`](e2e/) (Docker). See `e2e/README.md`.
 

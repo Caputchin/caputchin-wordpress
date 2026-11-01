@@ -43,13 +43,16 @@ if ( ! defined( 'CAPUTCHIN_VERIFY_URL' ) ) {
 
 if ( ! defined( 'CAPUTCHIN_WIDGET_SRC' ) ) {
 	/*
-	 * Prod default: the published widget bundle on jsDelivr. A site can repoint
-	 * this (define it in wp-config.php, or filter caputchin_widget_src) at a
-	 * locally served bundle. This matters because the widget's verification
-	 * host is fixed inside the bundle when it is built and cannot be changed
-	 * per page, so a local end-to-end test must serve a locally built bundle.
+	 * Default: the published widget bundle shipped inside the plugin
+	 * (assets/widget/, refreshed with bin/vendor-widget.sh). WordPress.org does
+	 * not allow loading plugin JavaScript from a third-party CDN, so the site
+	 * serves it itself. A site can repoint this (define it in wp-config.php, or
+	 * filter caputchin_widget_src) at another bundle. This matters because the
+	 * widget's verification host is fixed inside the bundle when it is built
+	 * and cannot be changed per page, so a local end-to-end test must serve a
+	 * locally built bundle.
 	 */
-	define( 'CAPUTCHIN_WIDGET_SRC', 'https://cdn.jsdelivr.net/npm/@caputchin/widget@3/dist/widget.js' );
+	define( 'CAPUTCHIN_WIDGET_SRC', CAPUTCHIN_URL . 'assets/widget/widget.js' );
 }
 
 /**

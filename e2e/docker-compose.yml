@@ -1,7 +1,7 @@
 # Local test environment for the Caputchin plugin.
 #
 # Runs a real WordPress at http://localhost:8080 with the plugin active. By
-# default the widget loads from the published bundle and verification uses the
+# default the widget loads from the bundled copy (assets/widget/) and verification uses the
 # hosted Caputchin service, so you only need a site key. To point at a different
 # widget build or verification endpoint, set CAPUTCHIN_WIDGET_SRC and
 # CAPUTCHIN_VERIFY_URL in the environment (a docker-compose.override.yml can
@@ -24,7 +24,7 @@ services:
       retries: 20
 
   wordpress:
-    image: wordpress:6-php8.3-apache
+    image: wordpress:7.1-php8.3-apache
     depends_on:
       db:
         condition: service_healthy
@@ -39,7 +39,7 @@ services:
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DEBUG: "1"
       # Optional overrides read by the test mu-plugin. Empty = plugin defaults
-      # (published widget bundle + hosted verification).
+      # (bundled widget + hosted verification).
       CAPUTCHIN_WIDGET_SRC: "${CAPUTCHIN_WIDGET_SRC:-}"
       CAPUTCHIN_VERIFY_URL: "${CAPUTCHIN_VERIFY_URL:-}"
     volumes:
