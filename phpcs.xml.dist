@@ -6,7 +6,6 @@
 	<exclude-pattern>/vendor/</exclude-pattern>
 	<exclude-pattern>/node_modules/</exclude-pattern>
 	<exclude-pattern>/e2e/</exclude-pattern>
-	<exclude-pattern>/tests/</exclude-pattern>
 	<exclude-pattern>*/blocks/*/index.js</exclude-pattern>
 
 	<arg name="extensions" value="php"/>
@@ -26,6 +25,12 @@
 		     All security and correctness sniffs stay enabled. -->
 		<exclude name="Squiz.Commenting.FunctionComment.Missing"/>
 		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+	</rule>
+
+	<!-- Tests read the plugin's own files from disk to check what ships;
+	     the WordPress filesystem API is not loaded under Brain Monkey. -->
+	<rule ref="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents">
+		<exclude-pattern>/tests/</exclude-pattern>
 	</rule>
 
 	<rule ref="WordPress.WP.I18n">

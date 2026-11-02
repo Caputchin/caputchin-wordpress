@@ -35,6 +35,9 @@ final class VerifierTest extends TestCase {
 
 	/**
 	 * Stub the HTTP layer to return a non-error response with the given body.
+	 *
+	 * @param string $body Response body.
+	 * @param int    $code HTTP status code.
 	 */
 	private function stub_response( string $body, int $code = 200 ): void {
 		Functions\when( 'is_wp_error' )->justReturn( false );
