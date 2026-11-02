@@ -24,8 +24,10 @@ final class SettingsPage {
 	private const GROUP = 'caputchin';
 	private const SLUG  = 'caputchin';
 
-	private const URL_DASHBOARD     = 'https://caputchin.com/app';
-	private const URL_MARKETPLACE   = 'https://caputchin.com/marketplace';
+	// Links to caputchin.com carry the channel so a sign-up is attributed to the plugin (ADR-0107).
+	// Only the dashboard link leads to sign-up, so only it carries ref; docs leave caputchin.com.
+	private const URL_DASHBOARD     = 'https://caputchin.com/app?ref=wp-plugin&utm_source=wordpress-org&utm_medium=referral';
+	private const URL_MARKETPLACE   = 'https://caputchin.com/marketplace?utm_source=wordpress-org&utm_medium=referral';
 	private const URL_DOCS          = 'https://docs.caputchin.com/en';
 	private const URL_DOC_SITE_KEYS = 'https://docs.caputchin.com/en/site-keys/overview';
 	private const URL_DOC_GAMES     = 'https://docs.caputchin.com/en/site-keys/games';
