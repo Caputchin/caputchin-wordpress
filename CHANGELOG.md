@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/Caputchin/caputchin-wordpress/compare/caputchin-wordpress-v0.1.1...caputchin-wordpress-v0.2.0) (2026-11-02)
+
+
+### Features
+
+* tag the dashboard and marketplace links for sign-up attribution ([c4b5a46](https://github.com/Caputchin/caputchin-wordpress/commit/c4b5a464b5ec2f7f673d9cbaeaaaa0e922d63fb3))
+* tag the dashboard and marketplace links for sign-up attribution ([5aa34c1](https://github.com/Caputchin/caputchin-wordpress/commit/5aa34c11a429f4594e6430cda62b1fc31927618a))
+
 ## [0.1.1](https://github.com/Caputchin/caputchin-wordpress/compare/caputchin-wordpress-v0.1.0...caputchin-wordpress-v0.1.1) (2026-11-01)
 
 
